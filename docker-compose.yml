@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_DB: rigel_electronic_cloud
       POSTGRES_USER: rkrigelsoft
-      POSTGRES_PASSWORD: "Rk!@#121"
+      POSTGRES_PASSWORD: Rk!@#121
     volumes:
       - /data/postgres:/var/lib/postgresql/data
     ports:
