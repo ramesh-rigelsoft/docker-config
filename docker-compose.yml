@@ -16,12 +16,12 @@ services:
 
   app:
     image: openjdk:17
-    container_name: java_app
+    container_name: user_service_core
     depends_on:
       - db
     volumes:
-      - /home/ubuntu/app/app.jar:/app.jar
-    command: ["java", "-jar", "/app.jar"]
+      - /home/ubuntu/rigelworkspace/user-service/todoapp.jar:/user.jar
+    command: ["java", "-jar", "/user.jar"]
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/rigel_electronic_cloud
       SPRING_DATASOURCE_USERNAME: rkrigelsoft
