@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   db:
     image: postgres:15
     container_name: postgres_db
@@ -8,22 +9,32 @@ services:
     environment:
       POSTGRES_DB: rigel_electronic_cloud
       POSTGRES_USER: rkrigelsoft
-      POSTGRES_PASSWORD: Rk!@#121
+      POSTGRES_PASSWORD: "Rk!@#121"
     volumes:
       - /data/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - app-network
 
   app:
-    image: openjdk:17
+    image: eclipse-temurin:17-jdk
     container_name: user_service_core
     depends_on:
       - db
     volumes:
-      - /home/ubuntu/rigelworkspace/user-service/todoapp.jar:/user.jar
-    command: ["java", "-jar", "/user.jar"]
+      - /home/ubuntu/rigelworkspace/user-service/todoapp.jar:/app.jar
+    command: ["java", "-jar", "/app.jar"]
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/rigel_electronic_cloud
       SPRING_DATASOURCE_USERNAME: rkrigelsoft
       SPRING_DATASOURCE_PASSWORD: "Rk!@#121"
+    ports:
+      - "8080:8080"
     restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
