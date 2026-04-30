@@ -30,7 +30,7 @@ services:
       SPRING_DATASOURCE_USERNAME: rkrigelsoft
       SPRING_DATASOURCE_PASSWORD: "Rk!@#121"
     ports:
-      - "8080:8080"
+      - "8089:8089"
     restart: always
     networks:
       - app-network
