@@ -1,40 +1,51 @@
-version: '3.8'
+version: "3.8"
 
 services:
 
-  db:
+  postgres:
     image: postgres:15
-    container_name: postgres_db
+    container_name: postgres-db
     restart: always
     environment:
       POSTGRES_DB: rigel_electronic_cloud
       POSTGRES_USER: rkrigelsoft
       POSTGRES_PASSWORD: "Rk!@#121"
-    volumes:
-      - /data/postgres:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
-    networks:
-      - app-network
-
-  app:
-    image: eclipse-temurin:17-jdk
-    container_name: user_service_core
-    depends_on:
-      - db
+      - "5435:5432"
     volumes:
-      - /home/ubuntu/rigelworkspace/user-service/todoapp.jar:/app.jar
-    command: ["java", "-jar", "/app.jar"]
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/rigel_electronic_cloud
-      SPRING_DATASOURCE_USERNAME: rkrigelsoft
-      SPRING_DATASOURCE_PASSWORD: "Rk!@#121"
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: spring-backend
+    restart: always
     ports:
       - "8089:8089"
-    restart: always
-    networks:
-      - app-network
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/rigel_electronic_cloud
+      SPRING_DATASOURCE_USERNAME: rkrigelsoft
+      SPRING_DATASOURCE_PASSWORD: "Rk!@#121"
 
-networks:
-  app-network:
-    driver: bridge
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    restart: always
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "8091:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  pgdata:
