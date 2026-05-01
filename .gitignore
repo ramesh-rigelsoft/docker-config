@@ -3,6 +3,7 @@
 # dependencies
 /ufrontend/node_modules
 /ufrontend/build
+/usercorebackend/target
 /.pnp
 .pnp.js
 
