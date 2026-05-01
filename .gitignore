@@ -1,9 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/user-frontend/node_modules
-/user-frontend/build
-/user-service/target
+/ufrontend/node_modules
+/ufrontend/build
 /.pnp
 .pnp.js
 
