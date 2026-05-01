@@ -1,15 +1,16 @@
-# ./usercorebackend/Dockerfile
-FROM eclipse-temurin:17-jdk AS build
+# Stage 1: Build with Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Maven wrapper और source code copy करें
-COPY . .
+# Copy pom.xml और dependencies पहले ताकि cache बने
+COPY pom.xml .
+COPY src ./src
 
-# Maven build चलाएँ (अगर gradle है तो gradle command दें)
-RUN ./mvnw clean package -DskipTests
+# Maven build (tests skip कर सकते हैं अगर चाहें)
+RUN mvn clean install -DskipTests
 
-# Final image
+# Stage 2: Run the JAR
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
